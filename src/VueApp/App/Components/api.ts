@@ -1,4 +1,5 @@
 import { LoginData } from "./Types/loginData";
+import { UserProfile } from "./Types/userProfile";
 import $ from 'jquery';
 
 type AjaxHeaders = { [key: string]: string };
@@ -9,14 +10,16 @@ const RequestVerificationTokenName = "__RequestVerificationToken";
 const getUserProfileUrl = `${baseUrl}api/Account/UserProfile`;
 const postExternalLoginUrl = `${baseUrl}api/Account/ExternalLogin`;
 const logoutUrl = `${baseUrl}api/Account/Signout`;
-let requestToken: string = '';
+
 export class Api {
+    static requestToken: string = '';
+    static userProfile: UserProfile = null;
 
     public getRequestHeaderToken(): string {
-        if (!requestToken) {
-            requestToken = <string>$('input[name=__RequestVerificationToken]:first').val();
+        if (!Api.requestToken) {
+            Api.requestToken = <string>$('input[name=__RequestVerificationToken]:first').val();
         }
-        return requestToken;
+        return Api.requestToken;
     }
 
     private getDataWithRequestVerificationToken(): any {
@@ -25,16 +28,22 @@ export class Api {
         return data;
     }
 
+    getUserProfile(): UserProfile {
+        return Api.userProfile;
+    }
+
     checkUserSession(): Promise<boolean> {
         return new Promise<boolean>(function (resolve/*, reject*/) {
             //resolve(true); return;
             $.get({
                 url: getUserProfileUrl
             })
-            .then(function () {
+            .then(function (data: any) {
+                Api.userProfile = <UserProfile>data;
                 resolve(true);
             })
             .catch(function () {
+                Api.userProfile = null;
                 console.log(arguments);
                 resolve(false);
             });

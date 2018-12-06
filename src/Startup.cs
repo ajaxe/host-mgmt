@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HostingUserMgmt.Helpers.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace HostingUserMgmt.Web
+namespace HostingUserMgmt
 {
     public class Startup
     {
@@ -56,11 +57,17 @@ namespace HostingUserMgmt.Web
                 opts.ClientId = Configuration.GetValue<string>(GoogleclientIdKey);
                 opts.ClientSecret = Configuration.GetValue<string>(GoogleclientSecretKey);
                 opts.SaveTokens = true;
+                opts.ClaimActions.Add(new GoogleClaimsProcessor("image.url"));
                 opts.Events = new OAuthEvents
                 {
                     OnTicketReceived = ctx =>
                     {
                         var uri = ctx.ReturnUri;
+                        return Task.CompletedTask;
+                    },
+                    OnCreatingTicket = ctx =>
+                    {
+                        var u = ctx.User;
                         return Task.CompletedTask;
                     },
                     OnRemoteFailure = ctx => Task.CompletedTask

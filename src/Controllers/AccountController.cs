@@ -17,16 +17,15 @@ namespace HostingUserMgmt.Controllers
         [HttpGet("UserProfile")]
         public IActionResult UserProfile()
         {
-            return Json(new {
-                claims = User.Claims.Select(c => new { c.Type, c.Value}),
-                identity = User.Identity.Name
-            });
+            return Json(new UserProfile(User.Claims));
         }
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpPost("Signout")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Signout()
         {
             await HttpContext.SignOutAsync();

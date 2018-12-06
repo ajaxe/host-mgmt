@@ -7,7 +7,8 @@
       ><i class="material-icons logo-embed"></i> <span class="align-top">{{appName}}</span></a>
       <div id="navbarSupportedContent" class="ml-auto">
         <div class="form-inline my-2 my-lg-0">
-          <i class="material-icons">account_circle</i>
+          <!--i class="material-icons">account_circle</i-->
+          <img v-bind:src="profileImage" class="avatar"/>
           <a class="btn btn-primary" href="javascript:void(0)" role="button"
             v-on:click="logout" v-if="showSignout">
             <span class="align-middle">Logout</span></a>
@@ -30,6 +31,9 @@
 .logo-embed
   mask: embedurl("../Images/apogee-logo.svg", "utf8") no-repeat;
   -webkit-mask: embedurl("../Images/apogee-logo.svg", "utf8") no-repeat;
+.avatar
+  border-radius: 20px;
+  height: 40px;
 </style>
 
 <script lang="ts">
@@ -42,18 +46,23 @@ import { EventNames } from "../events";
 export default class NavBar extends Vue {
   @Provide() appName: string = "Apogee-Dev";
   @Provide() showSignout: boolean = false;
+  @Provide() profileImage: string = "";
   readonly api: Api = new Api();
 
   constructor() {
     super();
     let self = this;
     self.$eventBus.$on(EventNames.LoginSuccess, function() {
-      self.toggleSignout(true);
-      console.log(EventNames.LoginSuccess);
+      self.$nextTick(function() {
+        self.toggleSignout(true);
+        console.log(EventNames.LoginSuccess);
+      });
     });
     self.$eventBus.$on(EventNames.LoginFailure, function() {
-      self.toggleSignout(false);
-      console.log(EventNames.LoginFailure);
+      self.$nextTick(function() {
+        self.toggleSignout(false);
+        console.log(EventNames.LoginFailure);
+      })
     });
   }
 
@@ -71,6 +80,7 @@ export default class NavBar extends Vue {
 
   toggleSignout(show: boolean) {
     this.showSignout = show;
+    this.profileImage = show ? this.api.getUserProfile().imageUrl : "";
     console.log("root logged in");
   }
 }

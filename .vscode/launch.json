@@ -16,10 +16,10 @@
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
                 "enabled": true,
-                "args": "${auto-detect-url}",
+                "args": "https://local.apogee-dev.com:5001",
                 "windows": {
                     "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
+                    "args": "/C start https://local.apogee-dev.com:5001"
                 },
                 "osx": {
                     "command": "open"
