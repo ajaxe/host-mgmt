@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-vue-app",
+            "command": "parcel",
+            "type": "shell",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/VueApp/App/index.ts",
+                "-d",
+                "${workspaceFolder}/src/wwwroot/"
+            ]
+        },
+        {
+            "label": "build-dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/HostingUserMgmt.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }, {
+            "label": "build",
+            "dependsOn": ["build-vue-app", "build-dotnet"]
+        }
+    ]
+}

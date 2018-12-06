@@ -5,8 +5,8 @@
       <div class="row justify-content-center">
         <div class="col-12 col-md-6">
           <div class="card mt-5">
+            <h2 class="card-header">API Key Management</h2>
             <div class="card-body">
-              <h2 class="card-title">API Key Management</h2>
               <router-view></router-view>
             </div>
             <div class="card-footer" v-if="showNavigation">
@@ -29,7 +29,7 @@
 
 <style lang="stylus" scoped>
 .card-body
-  height: calc(100vh - 300px);
+  height: calc(100vh - 400px);
 </style>
 
 
