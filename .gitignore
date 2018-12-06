@@ -1,0 +1,10 @@
+.cache/
+.vscode/
+
+wwwroot/
+node_modules/
+bin/
+obj/
+dist/
+
+secrets/
