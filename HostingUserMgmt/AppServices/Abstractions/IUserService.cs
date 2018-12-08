@@ -9,5 +9,6 @@ namespace HostingUserMgmt.AppServices.Abstractions
     {
         Task<UserProfileViewModel> GetUserProfile();
         Task AddOrUpdateUserOnLogin(IEnumerable<Claim> claims);
+        Task DeleteUserByExternalIdAsync(string externalId);
     }
 }

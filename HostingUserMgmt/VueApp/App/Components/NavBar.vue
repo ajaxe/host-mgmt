@@ -71,10 +71,7 @@ export default class NavBar extends Vue {
     event.preventDefault();
     let self = this;
     self.api.logout().finally(function() {
-      self.$nextTick(function() {
-        self.toggleSignout(false);
-      });
-      self.$router.push({ name: RouteNames.Login });
+      document.location.reload(true);
     });
   }
 

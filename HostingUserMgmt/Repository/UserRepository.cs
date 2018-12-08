@@ -34,5 +34,19 @@ namespace HostingUserMgmt.Repository
             return await context.Users.Where(u => externalId.Equals(u.ExternalId))
                 .FirstOrDefaultAsync();
         }
+        public async Task DeleteUserByExternalIdAsync(string externalId)
+        {
+            if(!string.IsNullOrWhiteSpace(externalId))
+            {
+                var existing = await context.Users
+                    .Where(u => u.ExternalId == externalId)
+                    .FirstOrDefaultAsync();
+                if(existing != null)
+                {
+                    context.Users.Remove(existing);
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
     }
 }

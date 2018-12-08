@@ -8,5 +8,6 @@ namespace HostingUserMgmt.Repository.Abstractions
         Task AddUser(User user);
         Task UpdateUser();
         Task<User> GetUserByExternalIdAsync(string externalId);
+        Task DeleteUserByExternalIdAsync(string externalId);
     }
 }

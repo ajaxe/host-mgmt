@@ -38,6 +38,12 @@
         <img v-bind:src="profileImage" class="avatar"/>
       </div>
     </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="button" class="btn btn-raised btn-danger" v-on:click="deleteUser">Delete Account</button>
+        <p class="text-warning">Deleting account will remove associated API Keys and removing any access to the services.</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -93,6 +99,16 @@ export default class Account extends Vue {
     let url = imageUrl.split("?")[0];
     let sz = size < 40 ? 40 : size;
     return `${url}?sz=${sz}`;
+  }
+  deleteUser(event: Event): void {
+    let self = this;
+    self.api.deleteUser()
+    .then(function(){
+      return self.api.logout();
+    })
+    .finally(function(){
+      document.location.reload(true);
+    });
   }
 }
 </script>

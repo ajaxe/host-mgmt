@@ -10,6 +10,7 @@ const RequestVerificationTokenName = "__RequestVerificationToken";
 const getUserProfileUrl = `${baseUrl}api/Account/UserProfile`;
 const postExternalLoginUrl = `${baseUrl}api/Account/ExternalLogin`;
 const logoutUrl = `${baseUrl}api/Account/Signout`;
+const deleteUser = `${baseUrl}api/Account`;
 
 export class Api {
     static requestToken: string = '';
@@ -97,4 +98,20 @@ export class Api {
         });
     }
 
+    deleteUser(): Promise<any> {
+        let profile = this.getUserProfile();
+        return new Promise<any>(function(resolve, reject) {
+            $.ajax({
+                method: "DELETE",
+                url: `${deleteUser}/${profile.externalId}`
+            })
+            .then(function() {
+                resolve();
+            })
+            .catch(function() {
+                console.log(arguments);
+                reject();
+            })
+        });
+    }
 }

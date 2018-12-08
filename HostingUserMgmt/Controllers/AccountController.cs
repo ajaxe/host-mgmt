@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HostingUserMgmt.Helpers.Authentication;
 using HostingUserMgmt.AppServices.Abstractions;
 using HostingUserMgmt.Domain.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -46,6 +47,7 @@ namespace HostingUserMgmt.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpPost("ExternalLogin")]
+        [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin([FromForm]ExternalLoginBindingModel model)
         {
             return Challenge(new AuthenticationProperties
@@ -53,6 +55,19 @@ namespace HostingUserMgmt.Controllers
                 RedirectUri = model.ReturnUrl ?? "/home/index",
                 IsPersistent = true
             }, model.LoginType);
+        }
+        [HttpDelete("{externalId}")]
+        public async Task<IActionResult> DeleteAccount(string externalId)
+        {
+            try
+            {
+                await userService.DeleteUserByExternalIdAsync(externalId);
+                return Ok();
+            }
+            catch(InvalidOperationException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -42,6 +42,19 @@ namespace HostingUserMgmt.AppServices
             }
         }
 
+        public async Task DeleteUserByExternalIdAsync(string externalId)
+        {
+            if(string.IsNullOrWhiteSpace(externalId))
+            {
+                return;
+            }
+            if(principal.GetNameIdentifier() != externalId)
+            {
+                throw new InvalidOperationException();
+            }
+            await userRepository.DeleteUserByExternalIdAsync(externalId);
+        }
+
         public async Task<UserProfileViewModel> GetUserProfile()
         {
             var id = GetNameIdentifier(principal.Claims);
