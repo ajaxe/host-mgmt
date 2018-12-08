@@ -7,9 +7,9 @@
             "type": "shell",
             "args": [
                 "build",
-                "${workspaceFolder}/src/VueApp/App/index.ts",
+                "${workspaceFolder}/HostingUserMgmt/VueApp/App/index.ts",
                 "-d",
-                "${workspaceFolder}/src/wwwroot/"
+                "${workspaceFolder}/HostingUserMgmt/wwwroot/"
             ]
         },
         {
@@ -18,7 +18,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/HostingUserMgmt.csproj"
+                "${workspaceFolder}/HostingUserMgmt/HostingUserMgmt.csproj"
             ],
             "problemMatcher": "$msCompile"
         }, {

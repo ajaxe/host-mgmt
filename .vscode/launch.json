@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/bin/Debug/netcoreapp2.1/HostingUserMgmt.dll",
+            "program": "${workspaceFolder}/HostingUserMgmt/bin/Debug/netcoreapp2.1/HostingUserMgmt.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src",
+            "cwd": "${workspaceFolder}/HostingUserMgmt",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
