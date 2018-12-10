@@ -19,7 +19,7 @@ namespace HostingUserMgmt
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://local.apogee-dev.com:5001")
+                //.UseUrls() set by env variable
                 .UseStartup<Startup>();
     }
 }

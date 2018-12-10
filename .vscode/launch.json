@@ -29,7 +29,8 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://local.apogee-dev.com:5001"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
