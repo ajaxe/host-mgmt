@@ -1,0 +1,4 @@
+./HostingUserMgmt/VueApp/.cache/*
+./HostingUserMgmt/VueApp/node_modules/*
+./HostingUserMgmt/bin/*
+./HostingUserMgmt/obj/*
