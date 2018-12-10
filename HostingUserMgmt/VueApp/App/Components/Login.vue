@@ -1,7 +1,7 @@
 <template>
   <form
     method="post"
-    action="/api/Account/ExternalLogin"
+    :action="externalLoginUrl"
     v-on:submit = "loginSubmit"
   >
     <input
@@ -38,8 +38,9 @@ import { EventNames } from "../events";
 export default class Login extends Vue {
   readonly api: Api = new Api();
   @Provide() requestVerificationToken: string = this.api.getRequestHeaderToken();
-  @Provide() returnUrl: string = "/home/index";
+  @Provide() returnUrl: string = Api.HomeIndexUrl;
   @Provide() loginType: string = "Google";
+  @Provide() externalLoginUrl: string  = Api.ExternalLoginUrl;
 
   googleClick(event: Event) {
       console.log("googleClick");

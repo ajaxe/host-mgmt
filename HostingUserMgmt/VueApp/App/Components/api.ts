@@ -15,6 +15,8 @@ const deleteUser = `${baseUrl}api/Account`;
 export class Api {
     static requestToken: string = '';
     static userProfile: UserProfile = null;
+    static ExternalLoginUrl: string = `${baseUrl}api/Account/ExternalLogin`;
+    static HomeIndexUrl: string = `${baseUrl}home/index`;
 
     public getRequestHeaderToken(): string {
         if (!Api.requestToken) {

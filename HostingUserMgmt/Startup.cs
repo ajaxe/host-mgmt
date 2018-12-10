@@ -23,19 +23,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.DataProtection;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using AutoMapper;
 using HostingUserMgmt.AppServices.Mapping;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace HostingUserMgmt
 {
     public class Startup
     {
+        private const string AppPathPrefixEnvVar = "AppPathPrefix";
         private const string GoogleclientIdKey = "Google:ClientId";
         private const string GoogleclientSecretKey = "Google:ClientSecret";
+        private readonly ILogger<Startup> logger;
         public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            logger = loggerFactory.CreateLogger<Startup>();
             var builder = new ConfigurationBuilder()
                     .SetBasePath(env.ContentRootPath)
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -43,12 +48,39 @@ namespace HostingUserMgmt
                     .AddJsonFile($"./secrets/secrets.{env.EnvironmentName}.json", optional: true)
                     .AddEnvironmentVariables();
             Configuration = builder.Build();
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
+
+        public string AppPathPrefix => Environment.GetEnvironmentVariable(AppPathPrefixEnvVar) ?? string.Empty;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+        {
+            CommonConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.RequireHeaderSymmetry = false;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
+            CommonConfigureServices(services);
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new System.IO.DirectoryInfo("/home/app/keys"));
+        }
+
+        private void CommonConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.Configure<CookiePolicyOptions>(options =>
@@ -69,20 +101,33 @@ namespace HostingUserMgmt
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void ConfigureDevelopment(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
+                throw new SystemException("called 'ConfigureDevelopment' for non-development environment");
             }
 
-            app.UseAuthentication();
+            app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
+
+            CommonConfigure(app, env);
+        }
+        public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (!env.IsProduction())
+            {
+                throw new SystemException("called 'ConfigureProduction' for non-production environment");
+            }
+            app.UseForwardedHeaders();
+
+            CommonConfigure(app, env);
+        }
+
+        private void CommonConfigure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseAuthentication();
+            app.UsePathBase(AppPathPrefix);
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -113,6 +158,12 @@ namespace HostingUserMgmt
             opts.ClientSecret = Configuration.GetValue<string>(GoogleclientSecretKey);
             opts.SaveTokens = true;
             opts.ClaimActions.Add(new GoogleClaimsProcessor(AppClaimTypes.GoogleImageUrl));
+            if(!string.IsNullOrWhiteSpace(AppPathPrefix))
+            {
+                var callbackPath = $"{AppPathPrefix}{opts.CallbackPath}";
+                logger.LogDebug($"Setting google callback path: {callbackPath}");
+                opts.CallbackPath = callbackPath;
+            }
             opts.Events = new OAuthEvents
             {
                 OnTicketReceived = ctx =>

@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="@Url.Content("~/logo.svg")">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
-    <link rel="stylesheet" href="~/index.css">
+    <link rel="stylesheet" href="@Url.Content("~/index.css")">
     <title></title>
 </head>
 <body>
-    <a href='@Url.Content("~/")' class="d-none" id="base-url">base-url</a>
+    <a href="@Url.Content("~/")" class="d-none" id="base-url">base-url</a>
     @Html.AntiForgeryToken()
     <div id="app"></div>
-    <script src="~/index.js"></script>
+    <script src="@Url.Content("~/index.js")"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ using HostingUserMgmt.Domain.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HostingUserMgmt.Controllers
 {
@@ -16,9 +17,12 @@ namespace HostingUserMgmt.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService userService;
-        public AccountController(IUserService userService)
+        private readonly ILogger<AccountController> logger;
+        public AccountController(IUserService userService,
+            ILogger<AccountController> logger)
         {
             this.userService = userService;
+            this.logger = logger;
         }
         [Authorize]
         [HttpGet("UserProfile")]
@@ -50,9 +54,11 @@ namespace HostingUserMgmt.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin([FromForm]ExternalLoginBindingModel model)
         {
+            var defaultRedirectUri = Url.Action("Index", "Home");
+            logger.LogDebug($"defaultRedirectUri = {defaultRedirectUri}");
             return Challenge(new AuthenticationProperties
             {
-                RedirectUri = model.ReturnUrl ?? "/home/index",
+                RedirectUri = model.ReturnUrl ?? defaultRedirectUri,
                 IsPersistent = true
             }, model.LoginType);
         }
