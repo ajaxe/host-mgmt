@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -29,6 +29,7 @@ using AutoMapper;
 using HostingUserMgmt.AppServices.Mapping;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 using Microsoft.AspNetCore.HttpOverrides;
+using HostingUserMgmt.Helpers.Configuration;
 
 namespace HostingUserMgmt
 {
@@ -83,6 +84,7 @@ namespace HostingUserMgmt
         private void CommonConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.Configure<AwsConfig>(Configuration.GetSection(nameof(AwsConfig)));
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
