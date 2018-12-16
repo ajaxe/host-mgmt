@@ -27,27 +27,39 @@ namespace HostingUserMgmt.AppServices
             this.mapper = mapper;
         }
 
-        public async Task<ApiKeyDisplayViewModel> CreateApiKey()
+        public async Task<NewApiKeyViewModel> CreateApiKey()
         {
             var userId = principal.GetUserId();
+            var newApiKey = await encryptionService.GenerateApiKey();
             var newCredential = new ApiCredential()
             {
                 UserId = userId,
-                UserSecret = await encryptionService.GetEncryptedRandomStringAsync()
+                UserSecret = newApiKey.HashedKeySecret,
+                Username = newApiKey.KeyName
             };
             await apiKeyRepository.AddAsync(newCredential);
-            return mapper.Map<ApiKeyDisplayViewModel>(newCredential);
+            newApiKey.HashedKeySecret = null;
+            return newApiKey;
         }
 
         public async Task<IList<ApiKeyDisplayViewModel>> GetApiKeysForDisplayAsync()
         {
             var userId = principal.GetUserId();
-            var partialKeys = await apiKeyRepository.GetPartialApiKeys(userId);
+            var partialKeys = await apiKeyRepository.GetApiKeysByUserIdAsync(userId);
             return mapper.Map<IList<ApiKeyDisplayViewModel>>(partialKeys);
         }
-        public Task<ApiKeyDisplayViewModel> GetApiKeyByIdAsync(int keyId)
+        public async Task<ApiKeyViewModel> GetApiKeyByIdAsync(int keyId)
         {
-            return null;
+            var apiKey = await apiKeyRepository.GetApiKeyByIdAsync(keyId);
+            if(apiKey == null)
+            {
+                return null;
+            }
+            var mappedKey = mapper.Map<ApiKeyViewModel>(apiKey);
+
+            mappedKey.Key = await encryptionService.DecryptString(mappedKey.Key);
+
+            return mappedKey;
         }
     }
 }

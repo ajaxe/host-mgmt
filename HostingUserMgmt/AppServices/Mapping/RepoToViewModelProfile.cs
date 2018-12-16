@@ -12,7 +12,12 @@ namespace HostingUserMgmt.AppServices.Mapping
                 .ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.Id));
             CreateMap<ApiCredential, ApiKeyDisplayViewModel>()
                 .ForMember(dest => dest.ApiKeyId, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ApiKeyName, opts => opts.MapFrom(src => src.Username))
                 .ForMember(dest => dest.CreatedAtUtc, opts => opts.MapFrom(src => src.CreatedAtUtc.Value.ToString("r")));
+
+            CreateMap<ApiCredential, ApiKeyViewModel>()
+                .ForMember(dest => dest.ApiKeyId, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Key, opts => opts.MapFrom(src => src.UserSecret));
         }
     }
 }

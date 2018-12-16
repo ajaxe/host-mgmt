@@ -25,9 +25,9 @@ namespace HostingUserMgmt.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            return Ok(await apiKeyService.GetApiKeyByIdAsync(id));
         }
 
         // POST api/values

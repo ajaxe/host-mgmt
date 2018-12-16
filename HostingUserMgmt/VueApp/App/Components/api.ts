@@ -2,6 +2,7 @@ import { LoginData } from "./Types/loginData";
 import { UserProfile } from "./Types/userProfile";
 import $ from 'jquery';
 import { ApiCredential } from "./Types/apiCredential";
+import { NewApiKey } from "./Types/newApiKey";
 
 type AjaxHeaders = { [key: string]: string };
 type HeaderOptions = { includeAuth?: boolean, includeCsrf?: boolean };
@@ -14,6 +15,7 @@ const logoutUrl = `${baseUrl}api/Account/Signout`;
 const deleteUser = `${baseUrl}api/Account`;
 const getApiKeysDisplayUrl = `${baseUrl}api/ApiKeys/Display`;
 const postApiKeyCreateUrl = `${baseUrl}api/ApiKeys/Create`;
+const getApiKeyById = `${baseUrl}api/ApiKeys`;
 
 export class Api {
     static requestToken: string = '';
@@ -132,19 +134,31 @@ export class Api {
         });
     }
 
-    createApiKey(): Promise<void> {
+    createApiKey(): Promise<NewApiKey> {
         let self = this;
-        return new Promise<void>(function(resolve, reject) {
+        return new Promise<NewApiKey>(function(resolve, reject) {
             $.post({
                 url: postApiKeyCreateUrl,
                 data: self.getDataWithRequestVerificationToken()
             })
-            .then(function() {
-                resolve();
+            .then(function(data) {
+                resolve(<NewApiKey>data);
             })
             .catch(function(){
                 reject();
+            });
+        });
+    }
+
+    getApiKeyById(id: number): Promise<ApiCredential> {
+        return new Promise<ApiCredential>(function(resolve, reject) {
+            $.get(`${getApiKeyById}/${id}`)
+            .then(function(data) {
+                resolve(<ApiCredential>data);
             })
+            .catch(function() {
+                reject();
+            });
         });
     }
 }

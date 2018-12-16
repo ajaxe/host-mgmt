@@ -24,24 +24,23 @@
         <button type="button" class="btn btn-raised btn-primary" v-on:click="addApiKey">
           <span class=material-icons>add</span>
           <span class="text">Add API Key</span></button>
+        <new-api-key-alert v-on:close="clearNewApiKey"
+          v-if="hasNewApiKey()"
+          v-bind:new-api-key="newApiKey"></new-api-key-alert>
         <div class="table-responsive">
           <table class="table">
             <thead>
               <tr>
-                <th>API Key Id</th>
+                <th>#</th>
+                <th>API Key Name</th>
                 <th>Created On</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="k in keys" v-bind:key="k.key">
-                <td>{{k.apiKeyId}}</td>
-                <td>{{k.createdAtUtc | formatDate}}</td>
-                <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Delete API Key">
-                    <i class="material-icons" >close</i>
-                  </a>
-                </td>
+              <tr is="api-key-row" v-for="k in keys"
+                v-bind:key="k.key" v-bind:key-name="k.apiKeyName"
+                v-bind:key-id="k.apiKeyId" v-bind:created-at-utc="k.createdAtUtc">
               </tr>
             </tbody>
           </table>
@@ -50,8 +49,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script lang="ts">
 import { Vue, Component, Prop, Provide } from "vue-property-decorator";
@@ -62,8 +59,15 @@ import { RouteNames } from "../routes";
 import { EventNames } from "../events";
 import { AuthHelpers } from "./authHelpers";
 import { ApiCredential } from "./Types/apiCredential";
+import { NewApiKey } from "./Types/newApiKey";
+import ApiKeyRow from  "./ApiKeyRow.vue";
+import NewApiKeyAlert from "./NewApiKeyAlert.vue";
 
 @Component({
+  components: {
+    ApiKeyRow,
+    NewApiKeyAlert
+  },
   beforeRouteEnter: (
     to: Route,
     from: Route,
@@ -79,6 +83,7 @@ import { ApiCredential } from "./Types/apiCredential";
 export default class Home extends Vue {
   @Provide() keys: ApiCredential[] = [];
   readonly api: Api = new Api();
+  private newApiKey: NewApiKey = null;
 
   constructor() {
     super();
@@ -103,9 +108,26 @@ export default class Home extends Vue {
   addApiKey(event: Event): void {
     let self = this;
     self.api.createApiKey()
-    .then(function(){
+    .then(function(key){
+      self.newApiKey = key;
       self.renderApiKeys();
     });
+  }
+
+  clearNewApiKey(): void {
+    this.newApiKey = null;
+  }
+
+  hasNewApiKey(): boolean {
+    return !!this.newApiKey;
+  }
+
+  newApiKeyName(): string {
+    return this.newApiKey ? this.newApiKey.keyName : '';
+  }
+
+  newApiKeySecret(): string {
+    return this.newApiKey ? this.newApiKey.keySecret : '';
   }
 }
 </script>

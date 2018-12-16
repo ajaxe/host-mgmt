@@ -21,16 +21,28 @@ namespace HostingUserMgmt.Repository
             await context.SaveChangesAsync();
         }
 
-        public async Task<IList<ApiCredential>> GetPartialApiKeys(int userId)
+        public Task<ApiCredential> GetApiKeyByIdAsync(int keyId)
+        {
+            return context.ApiCredentials.FindAsync(keyId);
+        }
+
+        public async Task<IList<ApiCredential>> GetApiKeysByUserIdAsync(int userId)
         {
             return await context.ApiCredentials
             .Where(creds => creds.UserId == userId)
             .Select(creds => new ApiCredential
             {
                 Id = creds.Id,
+                Username = creds.Username,
                 CreatedAtUtc = creds.CreatedAtUtc
             })
             .ToListAsync();
+        }
+
+        public async Task<bool> IsCredentialUsernameAvailableAsync(string keyName)
+        {
+            var present = await context.ApiCredentials.AnyAsync(ap => ap.Username == keyName);
+            return !present;
         }
     }
 }

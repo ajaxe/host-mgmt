@@ -1,6 +1,6 @@
 export class ApiCredential {
     public apiKeyId: number;
-    public key: string;
+    public apiKeyName: string;
     public createdAtUtc: Date;
     public username: string;
 }

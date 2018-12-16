@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using HostingUserMgmt.Domain.ViewModels;
 
 namespace HostingUserMgmt.AppServices.Abstractions
 {
@@ -6,6 +7,7 @@ namespace HostingUserMgmt.AppServices.Abstractions
     {
         Task<string> GetEncryptedRandomStringAsync();
 
-        string DecryptString(string cipherText, string salt);
+        Task<string> DecryptString(string encryptedString);
+        Task<NewApiKeyViewModel> GenerateApiKey();
     }
 }

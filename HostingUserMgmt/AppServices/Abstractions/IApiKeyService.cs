@@ -7,6 +7,7 @@ namespace HostingUserMgmt.AppServices.Abstractions
     public interface IApiKeyService
     {
         Task<IList<ApiKeyDisplayViewModel>> GetApiKeysForDisplayAsync();
-        Task<ApiKeyDisplayViewModel> CreateApiKey();
+        Task<NewApiKeyViewModel> CreateApiKey();
+        Task<ApiKeyViewModel> GetApiKeyByIdAsync(int keyId);
     }
 }
