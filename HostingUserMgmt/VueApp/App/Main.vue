@@ -3,23 +3,27 @@
     <nav-bar></nav-bar>
     <section class="container-fluid">
       <div class="row justify-content-center">
-        <div class="col-12 col-md-6">
-          <div class="card mt-5 top-level">
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="card top-level">
             <h2 class="card-header">API Key Management</h2>
+            <div class="row justify-content-center" v-if="showNavigation">
+              <div class="col-12 col-md-10 col-lg-4">
+                <nav class="nav nav-pills nav-fill top-level" v-on:click="onNavigationClick">
+                  <router-link to="/home" class="nav-item nav-link">
+                    <i class="material-icons">vpn_key</i>
+                    <div class="d-none d-md-block">API Keys</div>
+                  </router-link>
+                  <router-link to="/account" class="nav-item nav-link">
+                    <i class="material-icons">person</i>
+                    <div class="d-none d-md-block">Account</div>
+                  </router-link>
+              </nav>
+              </div>
+            </div>
             <div class="card-body">
               <router-view></router-view>
             </div>
-            <div class="card-footer" v-if="showNavigation">
-              <nav class="nav nav-pills nav-fill" v-on:click="onNavigationClick">
-                <router-link to="/home" class="nav-item nav-link">
-                  <i class="material-icons">vpn_key</i>
-                  <div class="d-none d-sm-block">API Keys</div>
-                </router-link>
-                <router-link to="/account" class="nav-item nav-link">
-                  <i class="material-icons">person</i>
-                  <div class="d-none d-sm-block">Account</div></router-link>
-              </nav>
-            </div>
+
           </div>
         </div>
       </div>
@@ -31,10 +35,12 @@
 .card.top-level
   font-size: 1rem;
 .card-body
-  height: calc(100vh - 400px);
+  height: calc(100vh - 240px);
   overflow: auto;
-</style>
 
+.nav.top-level .nav-item.nav-link
+  padding: 0.7143em .42em;
+</style>
 
 <script lang="ts">
 import { Vue, Component, Prop, Provide } from "vue-property-decorator";

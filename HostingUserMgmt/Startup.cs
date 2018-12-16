@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -30,6 +30,8 @@ using HostingUserMgmt.AppServices.Mapping;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 using Microsoft.AspNetCore.HttpOverrides;
 using HostingUserMgmt.Helpers.Configuration;
+using Amazon.KeyManagementService;
+using Amazon;
 
 namespace HostingUserMgmt
 {
@@ -196,19 +198,30 @@ namespace HostingUserMgmt
                         mySqlOptions.ServerVersion(new Version(10, 3, 11), ServerType.MySql);
                     })
             );
+            services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IApiKeyService, ApiKeyService>();
+            services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<ClaimsPrincipal>(serviceProvider =>
                 serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.User);
+
+            services.AddSingleton<IAmazonKeyManagementService>(sp => {
+                var opts = sp.GetRequiredService<IOptions<AwsConfig>>();
+                var cfg = opts?.Value ?? throw new ApplicationException("Could not retrieve AwsConfig options");
+                return  new AmazonKeyManagementServiceClient(cfg.AccessKeyId, cfg.AccessKeySecret, RegionEndpoint.GetBySystemName(cfg.Region));
+            });
         }
 
         private async Task GoogleOnCreatingTicket(OAuthCreatingTicketContext context)
         {
-            await context.HttpContext.RequestServices
+            var userId = await context.HttpContext.RequestServices
                 .GetRequiredService<IUserService>()
-                .AddOrUpdateUserOnLogin(context.Identity.Claims);
+                .AddOrUpdateUserOnLoginAsync(context.Identity.Claims);
+            context.Identity.AddClaim(new Claim(AppClaimTypes.AppUserId, userId.ToString()));
         }
     }
 }

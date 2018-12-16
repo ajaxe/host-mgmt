@@ -7,8 +7,8 @@ namespace HostingUserMgmt.AppServices.Abstractions
 {
     public interface IUserService
     {
-        Task<UserProfileViewModel> GetUserProfile();
-        Task AddOrUpdateUserOnLogin(IEnumerable<Claim> claims);
+        Task<UserProfileViewModel> GetUserProfileAsync();
+        Task<int> AddOrUpdateUserOnLoginAsync(IEnumerable<Claim> claims);
         Task DeleteUserByExternalIdAsync(string externalId);
     }
 }

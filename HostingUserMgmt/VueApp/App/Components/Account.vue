@@ -34,12 +34,9 @@
           </div>
         </div>
       </div>
-      <div class="col">
-        <img v-bind:src="profileImage" class="avatar"/>
-      </div>
     </div>
     <div class="row">
-      <div class="col-6">
+      <div class="col">
         <button type="button" class="btn btn-raised btn-danger" v-on:click="deleteUser">Delete Account</button>
         <p class="text-warning">Deleting account will remove associated API Keys and removing any access to the services.</p>
       </div>
@@ -90,7 +87,7 @@ export default class Account extends Vue {
     let profile = this.api.getUserProfile();
     this.name = profile.name;
     this.emailAddress = profile.emailAddress;
-    this.profileImage = this.setProfileImageHeight(profile.imageUrl, 200);
+    this.profileImage = this.setProfileImageHeight(profile.imageUrl, 40);
   }
   setProfileImageHeight(imageUrl: string, size: number): string {
     if(!imageUrl) {

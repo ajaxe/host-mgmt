@@ -30,7 +30,7 @@ namespace HostingUserMgmt.Controllers
         {
             try
             {
-                var up = await userService.GetUserProfile();
+                var up = await userService.GetUserProfileAsync();
                 return Json(up);
             }
             catch(InvalidOperationException ioe)

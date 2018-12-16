@@ -1,1 +1,6 @@
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
+.btn {
+    span.text {
+        line-height: 1.6rem;
+        vertical-align: top!important
+    }
+}

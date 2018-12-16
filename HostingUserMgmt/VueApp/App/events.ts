@@ -1,4 +1,5 @@
 export const EventNames = {
     LoginSuccess: 'LoginSuccess',
-    LoginFailure: 'LoginFailure'
+    LoginFailure: 'LoginFailure',
+    HomeMounted: 'HomeMounted'
 }

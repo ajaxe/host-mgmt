@@ -10,6 +10,9 @@ namespace HostingUserMgmt.AppServices.Mapping
         {
             CreateMap<User, UserProfileViewModel>()
                 .ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.Id));
+            CreateMap<ApiCredential, ApiKeyDisplayViewModel>()
+                .ForMember(dest => dest.ApiKeyId, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.CreatedAtUtc, opts => opts.MapFrom(src => src.CreatedAtUtc.Value.ToString("r")));
         }
     }
 }

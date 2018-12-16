@@ -27,7 +27,7 @@ namespace HostingUserMgmt.AppServices
             this.mapper = mapper;
         }
 
-        public async Task AddOrUpdateUserOnLogin(IEnumerable<Claim> claims)
+        public async Task<int> AddOrUpdateUserOnLoginAsync(IEnumerable<Claim> claims)
         {
             var id = GetNameIdentifier(claims);
             var user = await userRepository.GetUserByExternalIdAsync(id);
@@ -40,6 +40,7 @@ namespace HostingUserMgmt.AppServices
             {
                 await userRepository.UpdateUser();
             }
+            return newUser.Id;
         }
 
         public async Task DeleteUserByExternalIdAsync(string externalId)
@@ -55,7 +56,7 @@ namespace HostingUserMgmt.AppServices
             await userRepository.DeleteUserByExternalIdAsync(externalId);
         }
 
-        public async Task<UserProfileViewModel> GetUserProfile()
+        public async Task<UserProfileViewModel> GetUserProfileAsync()
         {
             var id = GetNameIdentifier(principal.Claims);
             var user = await userRepository.GetUserByExternalIdAsync(id);
