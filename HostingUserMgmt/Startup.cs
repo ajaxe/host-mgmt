@@ -41,16 +41,11 @@ namespace HostingUserMgmt
         private const string GoogleclientIdKey = "Google:ClientId";
         private const string GoogleclientSecretKey = "Google:ClientSecret";
         private readonly ILogger<Startup> logger;
-        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IConfiguration configuration)
         {
             logger = loggerFactory.CreateLogger<Startup>();
-            var builder = new ConfigurationBuilder()
-                    .SetBasePath(env.ContentRootPath)
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                    .AddJsonFile($"./secrets/secrets.{env.EnvironmentName}.json", optional: true)
-                    .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
             HostingEnvironment = env;
         }
 

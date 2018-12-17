@@ -7,6 +7,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace HostingUserMgmt
 {
@@ -19,6 +21,20 @@ namespace HostingUserMgmt
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingCtx, cfgBuilder) => {
+                    var env = hostingCtx.HostingEnvironment;
+                    cfgBuilder.SetBasePath(env.ContentRootPath)
+                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                        .AddJsonFile($"./secrets/secrets.{env.EnvironmentName}.json", optional: true)
+                        .AddEnvironmentVariables();
+                })
+                .UseSerilog((hostingCtx, logging) => {
+                    logging
+                    .ReadFrom.Configuration(hostingCtx.Configuration)
+                    .WriteTo
+                    .Console(new CompactJsonFormatter());
+                })
                 //.UseUrls() set by env variable
                 .UseStartup<Startup>();
     }
