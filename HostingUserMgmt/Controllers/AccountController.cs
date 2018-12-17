@@ -38,11 +38,6 @@ namespace HostingUserMgmt.Controllers
                 return NotFound();
             }
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpPost("Signout")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Signout()
@@ -62,6 +57,7 @@ namespace HostingUserMgmt.Controllers
                 IsPersistent = true
             }, model.LoginType);
         }
+        [Authorize]
         [HttpDelete("{externalId}")]
         public async Task<IActionResult> DeleteAccount(string externalId)
         {

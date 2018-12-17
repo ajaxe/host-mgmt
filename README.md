@@ -7,3 +7,13 @@ Simple interface for registering new users for the [Private Hosting](http://apog
 ## Setup Configuration
 
 The project relies on `secrets.{env}.json` one-level outside the workspace. The `secrets.{env}.json` contains the secrets for external identity providers. Where `{env}` is environment specific keyword like `Development` or `Production`.
+
+## Docker Image
+
+Docker image build:
+
+`docker build --tag docker-registry.apogee-dev.com/host-mgmt .`
+
+Docker image push
+
+`docker push docker-registry.apogee-dev.com/host-mgmt`
