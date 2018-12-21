@@ -39,14 +39,12 @@ namespace HostingUserMgmt.Controllers
             }
         }
         [HttpPost("Signout")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Signout()
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
         [HttpPost("ExternalLogin")]
-        [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin([FromForm]ExternalLoginBindingModel model)
         {
             var defaultRedirectUri = Url.Action("Index", "Home");

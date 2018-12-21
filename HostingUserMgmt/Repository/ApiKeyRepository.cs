@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,16 @@ namespace HostingUserMgmt.Repository
         {
             var present = await context.ApiCredentials.AnyAsync(ap => ap.Username == keyName);
             return !present;
+        }
+
+        public async Task DeleteApiCredentialAsync(ApiCredential apiCreds)
+        {
+            if(apiCreds == null)
+            {
+                throw new ArgumentNullException(nameof(apiCreds));
+            }
+            context.ApiCredentials.Remove(apiCreds);
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -97,7 +97,10 @@ namespace HostingUserMgmt
             ConfigureAutoMapper(services);
             ConfigureDependencyInjection(services);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void ConfigureDevelopment(IApplicationBuilder app, IHostingEnvironment env)

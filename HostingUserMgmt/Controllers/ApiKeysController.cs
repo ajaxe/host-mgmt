@@ -32,7 +32,6 @@ namespace HostingUserMgmt.Controllers
         }
 
         [HttpPost("Create")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateApiKey()
         {
             var newKey = await apiKeyService.CreateApiKey();
@@ -40,8 +39,9 @@ namespace HostingUserMgmt.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            return Ok(await apiKeyService.DeleteApiKeyByIdAsync(id));
         }
     }
 }

@@ -15,7 +15,8 @@ const logoutUrl = `${baseUrl}api/Account/Signout`;
 const deleteUser = `${baseUrl}api/Account`;
 const getApiKeysDisplayUrl = `${baseUrl}api/ApiKeys/Display`;
 const postApiKeyCreateUrl = `${baseUrl}api/ApiKeys/Create`;
-const getApiKeyById = `${baseUrl}api/ApiKeys`;
+const getApiKeyByIdUrl = `${baseUrl}api/ApiKeys`;
+const deleteApiKeyByIdUrl = `${baseUrl}api/ApiKeys`;
 
 export class Api {
     static requestToken: string = '';
@@ -152,7 +153,24 @@ export class Api {
 
     getApiKeyById(id: number): Promise<ApiCredential> {
         return new Promise<ApiCredential>(function(resolve, reject) {
-            $.get(`${getApiKeyById}/${id}`)
+            $.get(`${getApiKeyByIdUrl}/${id}`)
+            .then(function(data) {
+                resolve(<ApiCredential>data);
+            })
+            .catch(function() {
+                reject();
+            });
+        });
+    }
+
+    deleteApiKeyById(id: number): Promise<ApiCredential> {
+        let self = this;
+        return new Promise<ApiCredential>(function(resolve, reject) {
+            $.ajax({
+                method: "DELETE",
+                url: `${deleteApiKeyByIdUrl}/${id}`,
+                data: self.getDataWithRequestVerificationToken()
+            })
             .then(function(data) {
                 resolve(<ApiCredential>data);
             })

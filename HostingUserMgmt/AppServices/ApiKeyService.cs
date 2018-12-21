@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -60,6 +61,21 @@ namespace HostingUserMgmt.AppServices
             mappedKey.Key = await encryptionService.DecryptString(mappedKey.Key);
 
             return mappedKey;
+        }
+        public async Task<ApiKeyDisplayViewModel> DeleteApiKeyByIdAsync(int keyId)
+        {
+            var apiKey = await apiKeyRepository.GetApiKeyByIdAsync(keyId);
+            if(apiKey == null)
+            {
+                return null;
+            }
+            if(principal.GetUserId() != apiKey.UserId)
+            {
+                throw new InvalidOperationException($"Key Id: {keyId} does not belong to user: {apiKey.UserId}");
+            }
+            var mapped = mapper.Map<ApiKeyDisplayViewModel>(apiKey);
+            await apiKeyRepository.DeleteApiCredentialAsync(apiKey);
+            return mapped;
         }
     }
 }

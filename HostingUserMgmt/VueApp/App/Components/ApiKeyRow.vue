@@ -4,7 +4,7 @@
     <td>{{keyName}}</td>
     <td>{{createdAtUtc | formatDate}}</td>
     <td>
-      <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Delete API Key">
+      <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Delete API Key" v-on:click="deleteKey">
         <i class="material-icons">close</i>
       </a>
     </td>
@@ -24,13 +24,13 @@ export default class ApiKeyRow extends Vue {
 
   readonly api: Api = new Api();
 
-  showKey(event: Event): void {
+  deleteKey(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
     let self = this;
-    self.api.getApiKeyById(self.keyId)
+    self.api.deleteApiKeyById(self.keyId)
     .then(function(keyData) {
-      self.keyName = keyData.keyName;
+      self.$emit("delete", { keyId: self.keyId });
     });
   }
 };

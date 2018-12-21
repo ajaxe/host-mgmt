@@ -40,7 +40,8 @@
             <tbody>
               <tr is="api-key-row" v-for="k in keys"
                 v-bind:key="k.key" v-bind:key-name="k.apiKeyName"
-                v-bind:key-id="k.apiKeyId" v-bind:created-at-utc="k.createdAtUtc">
+                v-bind:key-id="k.apiKeyId" v-bind:created-at-utc="k.createdAtUtc"
+                v-on:delete="removeKey">
               </tr>
             </tbody>
           </table>
@@ -128,6 +129,17 @@ export default class Home extends Vue {
 
   newApiKeySecret(): string {
     return this.newApiKey ? this.newApiKey.keySecret : '';
+  }
+
+  removeKey(data): void {
+    if(!data.keyId) {
+      return;
+    }
+    let keyid = data.keyId;
+    let keyToRemove = this.keys.findIndex((cred, i, arr): boolean => {
+      return cred.apiKeyId === keyid
+    });
+    this.keys.splice(keyToRemove, 1);
   }
 }
 </script>
