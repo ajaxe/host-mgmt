@@ -135,11 +135,19 @@ export default class Home extends Vue {
     if(!data.keyId) {
       return;
     }
-    let keyid = data.keyId;
+    let keyid = <number>data.keyId;
     let keyToRemove = this.keys.findIndex((cred, i, arr): boolean => {
       return cred.apiKeyId === keyid
     });
     this.keys.splice(keyToRemove, 1);
+    this.$nextTick(function() {
+      this.removeTooltip(keyid);
+    });
+
+  }
+
+  removeTooltip(id: number): void {
+    $(`#home tr[data-id=${id}] [data-toggle=tooltip]`).tooltip('dispose');
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr v-bind:data-id="keyId">
     <td>{{keyId}}</td>
     <td>{{keyName}}</td>
     <td>{{createdAtUtc | formatDate}}</td>
