@@ -89,7 +89,7 @@ export default class Home extends Vue {
   constructor() {
     super();
     let self = this;
-    self.$eventBus.$on(EventNames.HomeMounted, function() {
+    self.$eventBus.$once(EventNames.HomeMounted, function() {
       self.renderApiKeys();
       console.log(EventNames.HomeMounted);
     });

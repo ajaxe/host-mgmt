@@ -52,13 +52,13 @@ export default class NavBar extends Vue {
   constructor() {
     super();
     let self = this;
-    self.$eventBus.$on(EventNames.LoginSuccess, function() {
+    self.$eventBus.$once(EventNames.LoginSuccess, function() {
       self.$nextTick(function() {
         self.toggleSignout(true);
         console.log(EventNames.LoginSuccess);
       });
     });
-    self.$eventBus.$on(EventNames.LoginFailure, function() {
+    self.$eventBus.$once(EventNames.LoginFailure, function() {
       self.$nextTick(function() {
         self.toggleSignout(false);
         console.log(EventNames.LoginFailure);
