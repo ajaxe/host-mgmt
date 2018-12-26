@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Google.Apis.Auth.AspNetCore;
 
 namespace HostingUserMgmt.Controllers
 {
@@ -44,16 +45,15 @@ namespace HostingUserMgmt.Controllers
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-        [HttpPost("ExternalLogin")]
-        public IActionResult ExternalLogin([FromForm]ExternalLoginBindingModel model)
+        [HttpPost("GoogleOAuthLogin")]
+        public IActionResult GoogleOAuthLogin([FromForm]ExternalLoginBindingModel model)
         {
             var defaultRedirectUri = Url.Action("Index", "Home");
             logger.LogDebug($"defaultRedirectUri = {defaultRedirectUri}");
             return Challenge(new AuthenticationProperties
             {
                 RedirectUri = model.ReturnUrl ?? defaultRedirectUri,
-                IsPersistent = true
-            }, model.LoginType);
+            }, GoogleOpenIdConnectDefaults.AuthenticationScheme);
         }
         [Authorize]
         [HttpDelete("{externalId}")]

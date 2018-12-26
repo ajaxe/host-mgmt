@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
 using HostingUserMgmt.Domain.EntityModels;
+using HostingUserMgmt.Helpers.Authentication;
 
 namespace HostingUserMgmt.AppServices.Mapping
 {
@@ -14,7 +15,7 @@ namespace HostingUserMgmt.AppServices.Mapping
             .ForMember(dest => dest.ExternalId,
                 opts => MapFromClaimType(opts, ClaimTypes.NameIdentifier))
             .ForMember(dest => dest.Name,
-                opts => MapFromClaimType(opts, ClaimTypes.Name))
+                opts => MapFromClaimType(opts, AppClaimTypes.Name))
             .ForMember(dest => dest.EmailAddress,
                 opts => MapFromClaimType(opts, ClaimTypes.Email));
         }

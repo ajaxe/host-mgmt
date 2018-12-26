@@ -15,3 +15,15 @@ Removing last migration: Only useful if the migration is not applied to database
 Updating database after adding the migration
 
 `dotnet ef database update --project . --context HostingManagementDbContext`
+
+### Docker Image Build
+
+`docker build --tag docker-registry.apogee-dev.com/host-mgmt .`
+
+`docker push docker-registry.apogee-dev.com/host-mgmt`
+
+## Resources
+
+### Google OAuth References
+
+https://developers.google.com/identity/sign-in/web/sign-in?refresh=1

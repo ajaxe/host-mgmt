@@ -10,18 +10,18 @@ type HeaderOptions = { includeAuth?: boolean, includeCsrf?: boolean };
 const baseUrl = $("#base-url").prop("href");
 const RequestVerificationTokenName = "__RequestVerificationToken";
 const getUserProfileUrl = `${baseUrl}api/Account/UserProfile`;
-const postExternalLoginUrl = `${baseUrl}api/Account/ExternalLogin`;
 const logoutUrl = `${baseUrl}api/Account/Signout`;
 const deleteUser = `${baseUrl}api/Account`;
 const getApiKeysDisplayUrl = `${baseUrl}api/ApiKeys/Display`;
 const postApiKeyCreateUrl = `${baseUrl}api/ApiKeys/Create`;
 const getApiKeyByIdUrl = `${baseUrl}api/ApiKeys`;
 const deleteApiKeyByIdUrl = `${baseUrl}api/ApiKeys`;
+const postGoogleOAuthLogin = `${baseUrl}api/Account/GoogleOAuthLogin`;
 
 export class Api {
     static requestToken: string = '';
     static userProfile: UserProfile = null;
-    static ExternalLoginUrl: string = `${baseUrl}api/Account/ExternalLogin`;
+    static GoogleLoginUrl: string = postGoogleOAuthLogin;
     static HomeIndexUrl: string = `${baseUrl}home/index`;
 
     public getRequestHeaderToken(): string {
@@ -55,36 +55,6 @@ export class Api {
                 Api.userProfile = null;
                 console.log(arguments);
                 resolve(false);
-            });
-        });
-    }
-
-    login(loginData: LoginData): Promise<string | null> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            let d = self.getDataWithRequestVerificationToken();
-            Object.assign(d, loginData);
-            $.post({
-                url: postExternalLoginUrl,
-                data: d,
-                statusCode: {
-                    200: function () {
-                        resolve();
-                    },
-                    302: function() {
-                        console.log('302 response');
-                        console.log(arguments);
-                        reject();
-                    }
-                }
-            })
-            .then(function () {
-                resolve();
-            })
-            .catch(function () {
-                console.log('Post error: login:');
-                console.log(arguments);
-                reject();
             });
         });
     }
