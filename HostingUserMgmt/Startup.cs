@@ -32,6 +32,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace HostingUserMgmt {
     public class Startup {
+        /// <summary>
+        /// Sub-folder App path prefix to be used for hosting in kestrel.
+        /// This value is configured in the docker-compose service stack "environment" section.
+        /// </summary>
         private const string AppPathPrefixEnvVar = "AppPathPrefix";
         private const string GoogleclientIdKey = "GoogleConfig:ClientId";
         private const string GoogleclientSecretKey = "GoogleConfig:ClientSecret";
@@ -195,6 +199,12 @@ namespace HostingUserMgmt {
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
             };
+            if(!string.IsNullOrWhiteSpace(AppPathPrefix))
+            {
+                var callbackPath = $"{AppPathPrefix}{oidcOptions.CallbackPath}";
+                logger.LogDebug($"Setting google callback path: {callbackPath}");
+                oidcOptions.CallbackPath = callbackPath;
+            }
         }
     }
 }
