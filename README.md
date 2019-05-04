@@ -17,3 +17,7 @@ Docker image build:
 Docker image push
 
 `docker push docker-registry.apogee-dev.com/host-mgmt`
+
+## Docker Compose File
+
+[docker-compose.yml](https://github.com/ajaxe/private-hosting/blob/master/host-mgmt/docker-compose.yml) contains an example for deploying the application.
