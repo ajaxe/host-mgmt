@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HostingUserMgmt.AppServices.Abstractions;
@@ -76,6 +77,31 @@ namespace HostingUserMgmt.AppServices
             var mapped = mapper.Map<ApiKeyDisplayViewModel>(apiKey);
             await apiKeyRepository.DeleteApiCredentialAsync(apiKey);
             return mapped;
+        }
+
+        public async Task<bool> VerifyApiKeyCredentialsAsync(string authScheme, string authParameter)
+        {
+            ThrowIfNotBasicScheme(authScheme);
+            (var username, var password) = GetBasicAuthTokens(authParameter);
+            var apiKey = await apiKeyRepository.GetApiKeyByUsernameAsync(username);
+            return encryptionService.VerifySecret(password, apiKey.UserSecret);
+        }
+        private void ThrowIfNotBasicScheme(string authScheme)
+        {
+            if(string.Compare(authScheme, "Basic", true) != 0)
+            {
+                throw new InvalidOperationException("Supports only 'Basic' authentication scheme");
+            }
+        }
+        private (string username, string password) GetBasicAuthTokens(string authHeaderParameter)
+        {
+            var usernamePassword = Encoding.UTF8.GetString(Convert.FromBase64String(authHeaderParameter));
+            var parts = usernamePassword.Split(":");
+            if(parts.Length != 2)
+            {
+                throw new InvalidOperationException("Invalid basic auth header parameter value");
+            }
+            return (parts[0], parts[1]);
         }
     }
 }

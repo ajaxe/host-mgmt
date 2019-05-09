@@ -13,7 +13,7 @@
     <PackageReference Include="AWSSDK.KeyManagementService" Version="3.3.7.4" />
     <PackageReference Include="Google.Apis.Auth" Version="1.36.1" />
     <PackageReference Include="Google.Apis.Auth.AspNetCore" Version="1.36.1-beta01" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.2" />

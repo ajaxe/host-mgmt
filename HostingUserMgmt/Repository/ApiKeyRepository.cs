@@ -55,5 +55,14 @@ namespace HostingUserMgmt.Repository
             context.ApiCredentials.Remove(apiCreds);
             await context.SaveChangesAsync();
         }
+
+        public async Task<ApiCredential> GetApiKeyByUsernameAsync(string apiCredentialUsername)
+        {
+            if(string.IsNullOrWhiteSpace(apiCredentialUsername))
+            {
+                throw new ArgumentException("Null or empty", nameof(apiCredentialUsername));
+            }
+            return await context.ApiCredentials.Where(creds => creds.Username == apiCredentialUsername).FirstAsync();
+        }
     }
 }

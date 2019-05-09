@@ -74,17 +74,33 @@ namespace HostingUserMgmt.AppServices
             var keyName = await GetUniqueKeyId();
             var salt = GetRandomSecret(8);
             var secret = GetRandomSecret();
-            byte[] hashedResult = null;
-            using(var prv = new SHA256CryptoServiceProvider())
-            {
-                hashedResult = prv.ComputeHash(ASCIIEncoding.UTF8.GetBytes($"{salt}{secret}"));
-            }
+            byte[] hashedResult = ComputeHash(secret, salt);
             return new NewApiKeyViewModel
             {
                 KeyName = keyName,
                 KeySecret = secret,
-                HashedKeySecret = $"{salt}|{Convert.ToBase64String(hashedResult)}"
+                HashedKeySecret = GenerateHashedKeySecret(salt, hashedResult)
             };
+        }
+        private byte[] ComputeHash(string secret, string salt)
+        {
+            using(var prv = new SHA256CryptoServiceProvider())
+            {
+                return prv.ComputeHash(ASCIIEncoding.UTF8.GetBytes($"{salt}{secret}"));
+            }
+        }
+        private string GenerateHashedKeySecret(string salt, byte[] hashedValue)
+        {
+            return $"{salt}|{Convert.ToBase64String(hashedValue)}";
+        }
+        private (string salt, byte[] hashedValue) SplitHashedKeySecret(string hashedKeySecret)
+        {
+            var parts = hashedKeySecret.Split("|");
+            if(parts.Length != 2)
+            {
+                throw new InvalidOperationException("Invalid hashed key secret string");
+            }
+            return (parts[0], Convert.FromBase64String(parts[1]));
         }
         private async Task<byte[]> GetDecryptedDataKey()
         {
@@ -118,6 +134,14 @@ namespace HostingUserMgmt.AppServices
                 }
             }
             throw new SystemException($"Failed to create unique 'KeyId' in {attempts} attempts");
+        }
+
+        public bool VerifySecret(string plainText, string encryptedString)
+        {
+            (string salt, byte[] hashedValue) = SplitHashedKeySecret(encryptedString);
+
+            var rehash = ComputeHash(plainText, salt);
+            return rehash.Length == hashedValue.Length && rehash.SequenceEqual(hashedValue);
         }
     }
 }

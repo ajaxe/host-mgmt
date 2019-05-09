@@ -11,5 +11,6 @@ namespace HostingUserMgmt.Repository.Abstractions
         Task<ApiCredential> GetApiKeyByIdAsync(int keyId);
         Task<bool> IsCredentialUsernameAvailableAsync(string keyName);
         Task DeleteApiCredentialAsync(ApiCredential apiCreds);
+        Task<ApiCredential> GetApiKeyByUsernameAsync(string apiCredentialUsername);
     }
 }

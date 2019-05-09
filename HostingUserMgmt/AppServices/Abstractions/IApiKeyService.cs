@@ -10,5 +10,6 @@ namespace HostingUserMgmt.AppServices.Abstractions
         Task<NewApiKeyViewModel> CreateApiKey();
         Task<ApiKeyViewModel> GetApiKeyByIdAsync(int keyId);
         Task<ApiKeyDisplayViewModel> DeleteApiKeyByIdAsync(int keyId);
+        Task<bool> VerifyApiKeyCredentialsAsync(string authScheme, string authParameter);
     }
 }

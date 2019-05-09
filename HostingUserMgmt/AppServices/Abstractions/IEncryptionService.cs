@@ -9,5 +9,7 @@ namespace HostingUserMgmt.AppServices.Abstractions
 
         Task<string> DecryptString(string encryptedString);
         Task<NewApiKeyViewModel> GenerateApiKey();
+
+        bool VerifySecret(string plainText, string encryptedString);
     }
 }
