@@ -48,7 +48,7 @@ export default class Login extends Vue {
       console.log("googleClick");
       this.requestVerificationToken = this.api.getRequestHeaderToken();
       this.loginType = "Google";
-      this.returnUrl = "/home/index";
+      this.returnUrl = `${document.baseURI}home/index`;
   }
 
   onGoogleSignIn(googleUser: any) {

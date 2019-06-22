@@ -1,4 +1,3 @@
-import { LoginData } from "./Types/loginData";
 import { UserProfile } from "./Types/userProfile";
 import $ from 'jquery';
 import { ApiCredential } from "./Types/apiCredential";
@@ -7,7 +6,7 @@ import { NewApiKey } from "./Types/newApiKey";
 type AjaxHeaders = { [key: string]: string };
 type HeaderOptions = { includeAuth?: boolean, includeCsrf?: boolean };
 
-const baseUrl = $("#base-url").prop("href");
+const baseUrl = document.baseURI;
 const RequestVerificationTokenName = "__RequestVerificationToken";
 const getUserProfileUrl = `${baseUrl}api/Account/UserProfile`;
 const logoutUrl = `${baseUrl}api/Account/Signout`;

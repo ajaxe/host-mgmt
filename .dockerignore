@@ -2,3 +2,6 @@
 ./HostingUserMgmt/VueApp/node_modules/*
 ./HostingUserMgmt/bin/*
 ./HostingUserMgmt/obj/*
+.cache
+.nyc_output
+.vscode

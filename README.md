@@ -12,11 +12,11 @@ The project relies on `secrets.{env}.json` one-level outside the workspace. The 
 
 Docker image build:
 
-`docker build --tag docker-registry.apogee-dev.com/host-mgmt .`
+`docker build --tag docker-registry.apogee-dev.com/host-mgmt:latest .`
 
 Docker image push
 
-`docker push docker-registry.apogee-dev.com/host-mgmt`
+`docker push docker-registry.apogee-dev.com/host-mgmt:latest`
 
 ## Docker Compose File
 
