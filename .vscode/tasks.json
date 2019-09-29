@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "build-vue-app",
-            "command": "parcel",
+            "command": "parcel.cmd",
             "type": "shell",
             "args": [
                 "build",
@@ -21,9 +21,17 @@
                 "${workspaceFolder}/HostingUserMgmt/HostingUserMgmt.csproj"
             ],
             "problemMatcher": "$msCompile"
-        }, {
+        },
+        {
             "label": "build",
-            "dependsOn": ["build-vue-app", "build-dotnet"]
+            "dependsOn": [
+                "build-vue-app",
+                "build-dotnet"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

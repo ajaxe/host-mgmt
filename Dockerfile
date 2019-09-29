@@ -17,7 +17,7 @@ COPY ./HostingUserMgmt/VueApp/App/ ./App/
 COPY ./HostingUserMgmt/VueApp/favicon.ico ./wwwroot
 RUN parcel build ./App/index.ts -d /home/app/wwwroot
 
-FROM microsoft/dotnet:2.1-sdk as builder
+FROM microsoft/dotnet:2.2-sdk as builder
 
 # Supress collection of data.
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -35,11 +35,11 @@ COPY ./HostingUserMgmt  .
 
 RUN dotnet publish -c release -o published
 
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
+FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
 
 # Create a non-root user
 RUN addgroup -S app \
-    && adduser -S app -G app
+  && adduser -S app -G app
 
 WORKDIR /home/app/
 COPY --from=builder /home/app/published .
@@ -50,7 +50,7 @@ VOLUME [ "/home/app/keys" ]
 USER app
 
 ENV ASPNETCORE_URLS=http://*:5000 \
-    ASPNETCORE_ENVIRONMENT=Production
+  ASPNETCORE_ENVIRONMENT=Production
 
 EXPOSE 5000
 

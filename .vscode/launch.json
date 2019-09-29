@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/HostingUserMgmt/bin/Debug/netcoreapp2.1/HostingUserMgmt.dll",
+            "program": "${workspaceFolder}/HostingUserMgmt/bin/Debug/netcoreapp2.2/HostingUserMgmt.dll",
             "args": [],
             "cwd": "${workspaceFolder}/HostingUserMgmt",
             "stopAtEntry": false,
@@ -19,7 +19,7 @@
                 "args": "https://local.apogee-dev.com:5001",
                 "windows": {
                     "command": "cmd.exe",
-                    "args": "/C start https://local.apogee-dev.com:5001"
+                    "args": "/C start http://localhost:5001"
                 },
                 "osx": {
                     "command": "open"
@@ -30,7 +30,7 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "https://local.apogee-dev.com:5001"
+                "ASPNETCORE_URLS": "http://localhost:5001"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
