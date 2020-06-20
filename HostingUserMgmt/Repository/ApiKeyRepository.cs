@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HostingUserMgmt.Repository
 {
-    public class ApiKeyRepository: IApiKeyRepository
+    public class ApiKeyRepository : IApiKeyRepository
     {
         private readonly HostingManagementDbContext context;
         public ApiKeyRepository(HostingManagementDbContext context)
@@ -22,9 +22,9 @@ namespace HostingUserMgmt.Repository
             await context.SaveChangesAsync();
         }
 
-        public Task<ApiCredential> GetApiKeyByIdAsync(int keyId)
+        public async Task<ApiCredential> GetApiKeyByIdAsync(int keyId)
         {
-            return context.ApiCredentials.FindAsync(keyId);
+            return await context.ApiCredentials.FindAsync(keyId);
         }
 
         public async Task<IList<ApiCredential>> GetApiKeysByUserIdAsync(int userId)
@@ -48,7 +48,7 @@ namespace HostingUserMgmt.Repository
 
         public async Task DeleteApiCredentialAsync(ApiCredential apiCreds)
         {
-            if(apiCreds == null)
+            if (apiCreds == null)
             {
                 throw new ArgumentNullException(nameof(apiCreds));
             }
@@ -58,7 +58,7 @@ namespace HostingUserMgmt.Repository
 
         public async Task<ApiCredential> GetApiKeyByUsernameAsync(string apiCredentialUsername)
         {
-            if(string.IsNullOrWhiteSpace(apiCredentialUsername))
+            if (string.IsNullOrWhiteSpace(apiCredentialUsername))
             {
                 throw new ArgumentException("Null or empty", nameof(apiCredentialUsername));
             }

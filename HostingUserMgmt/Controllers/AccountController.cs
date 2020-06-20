@@ -34,7 +34,7 @@ namespace HostingUserMgmt.Controllers
                 var up = await userService.GetUserProfileAsync();
                 return Json(up);
             }
-            catch(InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return NotFound();
             }
@@ -46,7 +46,7 @@ namespace HostingUserMgmt.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpPost("GoogleOAuthLogin")]
-        public IActionResult GoogleOAuthLogin([FromForm]ExternalLoginBindingModel model)
+        public IActionResult GoogleOAuthLogin([FromForm] ExternalLoginBindingModel model)
         {
             var defaultRedirectUri = Url.Action("Index", "Home");
             logger.LogDebug($"defaultRedirectUri = {defaultRedirectUri}");
@@ -64,7 +64,7 @@ namespace HostingUserMgmt.Controllers
                 await userService.DeleteUserByExternalIdAsync(externalId);
                 return Ok();
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return BadRequest();
             }
