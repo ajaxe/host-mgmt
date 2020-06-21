@@ -94,7 +94,7 @@ namespace HostingUserMgmt
             services.AddAuthentication(ConfigureAuthentication)
                 .AddCookie()
                 .AddOpenIdConnect(GoogleOidcAuthScheme, ConfigureGoogleOAuth);
-            //.AddGoogleOpenIdConnect(ConfigureGoogleOAuth);
+
             services.AddAuthorization();
 
             services.AddControllersWithViews();

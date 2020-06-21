@@ -1,4 +1,4 @@
-FROM kkarczmarczyk/node-yarn:latest as node_builder
+FROM node:latest as node_builder
 
 ENV NPM_CONFIG_LOGLEVEL warn
 
@@ -17,7 +17,7 @@ COPY ./HostingUserMgmt/VueApp/App/ ./App/
 COPY ./HostingUserMgmt/VueApp/favicon.ico ./wwwroot
 RUN parcel build ./App/index.ts -d /home/app/wwwroot
 
-FROM microsoft/dotnet:2.2-sdk as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
 
 # Supress collection of data.
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -33,9 +33,9 @@ RUN dotnet restore ./HostingUserMgmt.csproj
 
 COPY ./HostingUserMgmt  .
 
-RUN dotnet publish -c release -o published
+RUN dotnet publish -c Release -r linux-musl-x64 -o published
 
-FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
 
 # Create a non-root user
 RUN addgroup -S app \
