@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using HostingUserMgmt.Helpers.Authentication;
 using HostingUserMgmt.AppServices.Abstractions;
 using HostingUserMgmt.Domain.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Google.Apis.Auth.AspNetCore;
 
 namespace HostingUserMgmt.Controllers
 {
@@ -53,7 +49,7 @@ namespace HostingUserMgmt.Controllers
             return Challenge(new AuthenticationProperties
             {
                 RedirectUri = model.ReturnUrl ?? defaultRedirectUri,
-            }, GoogleOpenIdConnectDefaults.AuthenticationScheme);
+            }, Startup.GoogleOidcAuthScheme);
         }
         [Authorize]
         [HttpDelete("{externalId}")]

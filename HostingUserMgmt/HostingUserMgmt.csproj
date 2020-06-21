@@ -13,8 +13,6 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="AWSSDK.KeyManagementService" Version="3.3.106.9" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.46.0" />
-    <PackageReference Include="Google.Apis.Auth.AspNetCore" Version="1.46.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.5" />

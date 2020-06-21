@@ -34,6 +34,7 @@ namespace HostingUserMgmt
 {
     public class Startup
     {
+        public const string GoogleOidcAuthScheme = "google-oidc";
         /// <summary>
         /// Sub-folder App path prefix to be used for hosting in kestrel.
         /// This value is configured in the docker-compose service stack "environment" section.
@@ -93,8 +94,11 @@ namespace HostingUserMgmt
 
             services.AddAuthentication(ConfigureAuthentication)
                 .AddCookie()
-                .AddGoogleOpenIdConnect(ConfigureGoogleOAuth);
+                .AddOpenIdConnect(GoogleOidcAuthScheme, ConfigureGoogleOAuth);
+            //.AddGoogleOpenIdConnect(ConfigureGoogleOAuth);
             services.AddAuthorization();
+
+            services.AddControllersWithViews();
 
             ConfigureAutoMapper(services);
             ConfigureDependencyInjection(services);
@@ -133,14 +137,14 @@ namespace HostingUserMgmt
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "api",
-                    template: "api/{controller}/{action}/{id?}");
-                routes.MapRoute(
+                    pattern: "api/{controller}/{action}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
@@ -197,10 +201,13 @@ namespace HostingUserMgmt
 
         private void ConfigureGoogleOAuth(OpenIdConnectOptions oidcOptions)
         {
+            var callbackPathOption = "/signin-oidc-google";
             var gcfg = new GoogleConfig();
             Configuration.Bind(nameof(GoogleConfig), gcfg);
             oidcOptions.ClientId = gcfg.ClientId;
             oidcOptions.ClientSecret = gcfg.ClientSecret;
+            oidcOptions.Authority = "https://accounts.google.com";
+            oidcOptions.CallbackPath = callbackPathOption;
             oidcOptions.ResponseType = OpenIdConnectResponseType.CodeIdToken;
             oidcOptions.GetClaimsFromUserInfoEndpoint = true;
             oidcOptions.SaveTokens = true;
