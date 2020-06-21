@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace HostingUserMgmt.Helpers.Authentication
 {
@@ -13,15 +14,10 @@ namespace HostingUserMgmt.Helpers.Authentication
         {
             this.claimType = claimType ?? throw new ArgumentNullException(nameof(claimType));
         }
-        public override void Run(JObject userData, ClaimsIdentity identity, string issuer)
+        public override void Run(JsonElement userData, ClaimsIdentity identity, string issuer)
         {
-            var imageClaim = userData.SelectTokens(claimType);
-            foreach(var c  in imageClaim)
-            {
-                if(c.Path.Equals(claimType)) {
-                    identity.AddClaim(new Claim(claimType, c.Value<string>(), ValueType, issuer));
-                }
-            }
+            var imageClaim = userData.GetProperty(claimType);
+            identity.AddClaim(new Claim(claimType, imageClaim.GetString(), ValueType, issuer));
         }
     }
 }

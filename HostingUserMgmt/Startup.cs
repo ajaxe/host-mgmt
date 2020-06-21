@@ -204,6 +204,8 @@ namespace HostingUserMgmt
             oidcOptions.ClientSecret = gcfg.ClientSecret;
             oidcOptions.Authority = "https://accounts.google.com";
             oidcOptions.CallbackPath = callbackPathOption;
+            oidcOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+            oidcOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
             oidcOptions.ResponseType = OpenIdConnectResponseType.CodeIdToken;
             oidcOptions.GetClaimsFromUserInfoEndpoint = true;
             oidcOptions.SaveTokens = true;
