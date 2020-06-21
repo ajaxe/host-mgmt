@@ -19,7 +19,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 using Amazon;
 using Amazon.KeyManagementService;
@@ -165,11 +164,8 @@ namespace HostingUserMgmt
         private void ConfigureDependencyInjection(IServiceCollection services)
         {
             services.AddDbContextPool<HostingManagementDbContext>(
-                options => options.UseMySql(Configuration.GetConnectionString("Database"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 3, 11), ServerType.MySql);
-                    })
+                options => options.UseNpgsql(Configuration.GetConnectionString("Database"))
+                            .UseSnakeCaseNamingConvention()
             );
             services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddScoped<IUserService, UserService>();

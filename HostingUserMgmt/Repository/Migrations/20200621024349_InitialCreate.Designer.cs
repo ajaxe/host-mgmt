@@ -3,15 +3,17 @@ using System;
 using HostingUserMgmt.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HostingUserMgmt.Repository.Migrations
 {
     [DbContext(typeof(HostingManagementDbContext))]
-    partial class HostingManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200621024349_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
